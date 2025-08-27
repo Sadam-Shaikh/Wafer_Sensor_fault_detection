@@ -52,3 +52,4 @@
 [ 2025-08-27 18:46:12,400 ] 73 pipeline.predict_pipeline - INFO - Dropped unnamed/index columns before transform
 [ 2025-08-27 18:46:12,414 ] 89 pipeline.predict_pipeline - INFO - Prediction completed successfully
 [ 2025-08-27 18:46:13,270 ] 97 werkzeug - INFO - 127.0.0.1 - - [27/Aug/2025 18:46:13] "POST /predict HTTP/1.1" 200 -
+[ 2025-08-27 19:06:48,440 ] 97 werkzeug - INFO -  * Detected change in 'D:\\ML-project-main\\ML-project-main\\src\\components\\data_ingestion.py', reloading
