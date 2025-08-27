@@ -1,11 +1,11 @@
 import os
 import sys
-from components.data_ingestion import DataIngestion
-from components.data_validation import DataValidation
-from components.data_transformation import DataTransformation
-from components.model_trainer import ModelTrainer
-from utils.logger import get_logger
-from utils.exception import CustomException
+from src.components.data_ingestion import DataIngestion
+from src.components.data_validation import DataValidation
+from src.components.data_transformation import DataTransformation
+from src.components.model_trainer import ModelTrainer
+from src.utils.logger import get_logger
+from src.utils.exception import CustomException
 
 logger = get_logger(__name__)
 

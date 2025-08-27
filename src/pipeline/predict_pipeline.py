@@ -2,9 +2,9 @@ import os
 import sys
 import pandas as pd
 import numpy as np
-from utils.logger import get_logger
-from utils.exception import CustomException
-from utils.utils import load_object
+from src.utils.logger import get_logger
+from src.utils.exception import CustomException
+from src.utils.utils import load_object
 
 logger = get_logger(__name__)
 

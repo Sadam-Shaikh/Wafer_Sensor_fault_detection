@@ -4,9 +4,9 @@ import pandas as pd
 from sklearn.preprocessing import StandardScaler
 from sklearn.impute import SimpleImputer
 from sklearn.pipeline import Pipeline
-from utils.logger import get_logger
-from utils.exception import CustomException
-from utils.utils import save_object
+from src.utils.logger import get_logger
+from src.utils.exception import CustomException
+from src.utils.utils import save_object
 from config.config import DATA_TRANSFORMATION_CONFIG
 
 logger = get_logger(__name__)

@@ -1,8 +1,8 @@
 import os
 import json
 import pandas as pd
-from utils.logger import get_logger
-from utils.exception import CustomException
+from src.utils.logger import get_logger
+from src.utils.exception import CustomException
 from config.config import DATA_VALIDATION_CONFIG
 
 logger = get_logger(__name__)

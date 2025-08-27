@@ -1,9 +1,9 @@
 import os
 import pandas as pd
 from flask import Flask, request, render_template, jsonify
-from pipeline.predict_pipeline import PredictionPipeline, CustomData
-from utils.logger import get_logger
-from utils.exception import CustomException
+from src.pipeline.predict_pipeline import PredictionPipeline, CustomData
+from src.utils.logger import get_logger
+from src.utils.exception import CustomException
 
 app = Flask(__name__)
 logger = get_logger(__name__)
