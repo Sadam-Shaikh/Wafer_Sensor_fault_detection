@@ -1,0 +1,20 @@
+[ 2025-08-27 18:34:45,316 ] 33 src.pipeline.train_pipeline - INFO - Starting training pipeline
+[ 2025-08-27 18:34:45,316 ] 36 src.pipeline.train_pipeline - INFO - Data Ingestion started
+[ 2025-08-27 18:34:45,318 ] 34 components.data_ingestion - INFO - Data ingestion initiated
+[ 2025-08-27 18:34:45,318 ] 47 components.data_ingestion - INFO - Reading data from D:\ML-project-main\ML-project-main\data\raw\wafer_23012020_041211 (1).csv
+[ 2025-08-27 18:34:45,354 ] 61 components.data_ingestion - INFO - Dataset shape: (100, 592)
+[ 2025-08-27 18:34:45,399 ] 73 components.data_ingestion - INFO - Train data saved at: D:\ML-project-main\ML-project-main\artifacts\2025-08-27-18-34-45\data_ingestion\train\train.csv
+[ 2025-08-27 18:34:45,400 ] 74 components.data_ingestion - INFO - Test data saved at: D:\ML-project-main\ML-project-main\artifacts\2025-08-27-18-34-45\data_ingestion\test\test.csv
+[ 2025-08-27 18:34:45,400 ] 38 src.pipeline.train_pipeline - INFO - Data Ingestion completed
+[ 2025-08-27 18:34:45,400 ] 41 src.pipeline.train_pipeline - INFO - Data Validation started
+[ 2025-08-27 18:34:45,400 ] 95 components.data_validation - INFO - Starting data validation
+[ 2025-08-27 18:34:45,457 ] 104 components.data_validation - INFO - Train dataset shape: (80, 592)
+[ 2025-08-27 18:34:45,457 ] 105 components.data_validation - INFO - Test dataset shape: (20, 592)
+[ 2025-08-27 18:34:45,457 ] 28 components.data_validation - INFO - Schema loaded successfully from D:\ML-project-main\ML-project-main\config\schema.json
+[ 2025-08-27 18:34:45,459 ] 75 components.data_validation - ERROR - Invalid value -1 found in column Good/Bad
+[ 2025-08-27 18:34:45,459 ] 28 components.data_validation - INFO - Schema loaded successfully from D:\ML-project-main\ML-project-main\config\schema.json
+[ 2025-08-27 18:34:45,459 ] 75 components.data_validation - ERROR - Invalid value -1 found in column Good/Bad
+[ 2025-08-27 18:34:45,460 ] 126 components.data_validation - INFO - Data validation completed with status: False
+[ 2025-08-27 18:34:45,461 ] 127 components.data_validation - INFO - Validation report saved at: D:\ML-project-main\ML-project-main\artifacts\2025-08-27-18-34-45\data_validation\report.json
+[ 2025-08-27 18:34:45,461 ] 43 src.pipeline.train_pipeline - INFO - Data Validation completed
+[ 2025-08-27 18:34:45,461 ] 65 src.pipeline.train_pipeline - ERROR - Error in training pipeline: Data validation failed. Please check the data.
