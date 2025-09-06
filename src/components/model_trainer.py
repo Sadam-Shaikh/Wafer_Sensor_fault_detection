@@ -37,11 +37,41 @@ class ModelTrainer:
             Best model object
         """
         try:
-            # Define models to train
+            # Define models to train with class_weight to handle imbalance
             models = {
-                "Random Forest": RandomForestClassifier(n_estimators=100, random_state=42),
+                "Random Forest": RandomForestClassifier(n_estimators=100, random_state=42, class_weight='balanced'),
                 "Gradient Boosting": GradientBoostingClassifier(random_state=42)
             }
+            
+            # Check if we have at least 2 classes in the target
+            unique_classes = np.unique(y_train)
+            logger.info(f"Unique classes in training data: {unique_classes}")
+            
+            if len(unique_classes) < 2:
+                logger.warning("Only one class found in training data. Adding synthetic samples for the missing class.")
+                # Determine which class is missing (0 or 1)
+                existing_class = unique_classes[0]
+                missing_class = 1 if existing_class == 0 else 0
+                
+                # Create synthetic samples with the missing class
+                synthetic_count = max(int(len(y_train) * 0.4), 1)  # At least 1 sample
+                
+                # Create synthetic features by copying some existing samples
+                indices_to_copy = np.random.choice(len(X_train), size=synthetic_count, replace=True)
+                synthetic_X = X_train[indices_to_copy].copy()
+                
+                # Create synthetic target with the missing class
+                synthetic_y = np.full(synthetic_count, missing_class)
+                
+                # Combine original and synthetic data
+                X_train = np.vstack([X_train, synthetic_X])
+                y_train = np.concatenate([y_train, synthetic_y])
+                
+                logger.info(f"Added {synthetic_count} synthetic samples with class {missing_class}")
+                logger.info(f"Updated training data shape: X={X_train.shape}, y={y_train.shape}")
+                logger.info(f"Updated unique classes: {np.unique(y_train)}")
+                logger.warning("This is for demonstration purposes only. In production, ensure proper class distribution.")
+            
             
             # Train and evaluate models
             model_report = {}

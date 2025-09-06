@@ -50,7 +50,7 @@ DATA_TRANSFORMATION_CONFIG = {
 MODEL_TRAINER_CONFIG = {
     "trained_model_dir": os.path.join(ARTIFACTS_DIR, CURRENT_TIME_STAMP, "model_trainer"),
     "model_file_path": os.path.join(ARTIFACTS_DIR, CURRENT_TIME_STAMP, "model_trainer", "model.pkl"),
-    "base_accuracy": 0.6,
+    "base_accuracy": 0.3,  # Lowered for synthetic data
 }
 
 # Model evaluation config

@@ -84,23 +84,33 @@ def train():
                 # Fallback to direct import if src module is not found
                 from pipeline.train_pipeline import TrainPipeline
             
-            # Handle file upload
-            if 'file' not in request.files:
-                return render_template('train.html', error="No file uploaded")
+            # Initialize data path variable
+            data_path = None
             
-            file = request.files['file']
-            if file.filename == '':
-                return render_template('train.html', error="No file selected")
+            # Check if file was uploaded
+            if 'file' in request.files and request.files['file'].filename != '':
+                file = request.files['file']
+                # Save file temporarily
+                temp_file_path = os.path.join(os.path.dirname(os.path.dirname(__file__)), "data", "raw", file.filename)
+                file.save(temp_file_path)
+                data_path = temp_file_path
+                logger.info(f"File uploaded for training: {file.filename}")
             
-            # Save file temporarily
-            temp_file_path = os.path.join(os.path.dirname(os.path.dirname(__file__)), "data", "raw", file.filename)
-            file.save(temp_file_path)
+            # Check if URL was provided
+            elif 'data_url' in request.form and request.form['data_url'].strip() != '':
+                data_url = request.form['data_url'].strip()
+                logger.info(f"URL provided for training: {data_url}")
+                # Set the URL in environment variable for data ingestion
+                os.environ['DATA_FILE_URL'] = data_url
+                # No need to set data_path, the pipeline will use the URL
             
-            logger.info(f"File uploaded for training: {file.filename}")
+            # If neither file nor URL provided
+            else:
+                return render_template('train.html', error="Please either upload a file or provide a data URL")
             
             # Start training
             train_pipeline = TrainPipeline()
-            model_path = train_pipeline.start_training(temp_file_path)
+            model_path = train_pipeline.start_training(data_path)
             
             return render_template('train.html', success=f"Model trained successfully and saved at: {model_path}")
             

@@ -1,7 +1,0 @@
-{
-    "train_file_path": "D:\\ML-project-main\\ML-project-main\\artifacts\\2025-08-27-18-43-43\\data_ingestion\\train\\train.csv",
-    "test_file_path": "D:\\ML-project-main\\ML-project-main\\artifacts\\2025-08-27-18-43-43\\data_ingestion\\test\\test.csv",
-    "train_validation": true,
-    "test_validation": true,
-    "validation_status": true
-}

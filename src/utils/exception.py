@@ -11,9 +11,9 @@ logger = get_logger(__name__)
 class CustomException(Exception):
     def __init__(self, error_message, error_detail=None):
         super().__init__(error_message)
-        self.error_message = error_message
+        self.error_message = str(error_message)
         self.error_detail = error_detail or sys.exc_info()
-        logger.error(f"Exception occurred: {error_message}")
+        logger.error(f"Exception occurred: {self.error_message}")
         
     def __str__(self):
         return self.error_message

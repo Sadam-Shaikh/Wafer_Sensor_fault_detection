@@ -53,19 +53,23 @@ class DataValidation:
             schema = self.read_schema()
             validation_status = True
             
+            # Handle duplicate columns (especially Good/Bad which appears twice in some datasets)
+            if dataframe.columns.duplicated().any():
+                logger.warning("Duplicate columns found in dataset. Keeping first occurrence.")
+                dataframe = dataframe.loc[:, ~dataframe.columns.duplicated()]
+            
+            # Special handling: if 'Wafer' column is missing but there is an unnamed first column, treat it as 'Wafer'
+            if 'Wafer' not in dataframe.columns:
+                first_col = str(dataframe.columns[0])
+                if first_col.strip() == '' or first_col.lower().startswith('unnamed'):
+                    dataframe.rename(columns={dataframe.columns[0]: 'Wafer'}, inplace=True)
+                    logger.info("Renamed first unnamed column to 'Wafer' during validation")
+            
             # Check if all required columns are present
             for column in schema["columns"]:
                 if column not in dataframe.columns:
                     validation_status = False
                     logger.error(f"Required column {column} not found in the dataset")
-            # Special handling: if 'Wafer' column is missing but there is an unnamed first column, treat it as 'Wafer'
-            if not validation_status and 'Wafer' not in dataframe.columns:
-                first_col = str(dataframe.columns[0])
-                if first_col.strip() == '' or first_col.lower().startswith('unnamed'):
-                    dataframe.rename(columns={dataframe.columns[0]: 'Wafer'}, inplace=True)
-                    logger.info("Renamed first unnamed column to 'Wafer' during validation")
-                    # Re-check required columns
-                    validation_status = all(col in dataframe.columns for col in schema["columns"]) and (schema["target_column"] in dataframe.columns)
             
             # Check if target column exists
             if schema["target_column"] not in dataframe.columns:
@@ -79,8 +83,16 @@ class DataValidation:
                         unique_values = dataframe[column].unique()
                         for val in unique_values:
                             if val not in values:
-                                validation_status = False
-                                logger.error(f"Invalid value {val} found in column {column}")
+                                logger.warning(f"Invalid value {val} found in column {column}. Will proceed if allow_extra_columns is true.")
+                                if not schema.get("allow_extra_columns", False):
+                                    validation_status = False
+            
+            # If allow_extra_columns is true, we'll accept the dataset even with extra columns
+            if not validation_status and schema.get("allow_extra_columns", False):
+                # Only check if required columns are present
+                validation_status = all(col in dataframe.columns for col in schema["columns"]) and (schema["target_column"] in dataframe.columns)
+                if validation_status:
+                    logger.info("Dataset validated with extra columns allowed")
             
             return validation_status
         

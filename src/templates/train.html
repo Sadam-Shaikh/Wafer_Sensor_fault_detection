@@ -27,6 +27,10 @@
                 <label class="form-label">Training file (CSV/XLSX)</label>
                 <input class="form-control" type="file" name="file" accept=".csv,.xls,.xlsx" />
             </div>
+            <div class="mb-3">
+                <label class="form-label">Or Enter Data URL</label>
+                <input class="form-control" type="url" name="data_url" placeholder="https://example.com/data.csv" />
+            </div>
             <button class="btn btn-primary" type="submit">Start Training</button>
         </form>
     </div>
@@ -87,8 +91,13 @@
                         <form action="/train" method="post" enctype="multipart/form-data">
                             <div class="mb-3">
                                 <label for="file" class="form-label">Upload Training Data (CSV or Excel)</label>
-                                <input type="file" class="form-control" id="file" name="file" accept=".csv,.xls,.xlsx" required>
+                                <input type="file" class="form-control" id="file" name="file" accept=".csv,.xls,.xlsx">
                                 <div class="form-text">Upload a file containing wafer sensor data with target labels.</div>
+                            </div>
+                            <div class="mb-3">
+                                <label for="data_url" class="form-label">Or Enter Data URL</label>
+                                <input type="url" class="form-control" id="data_url" name="data_url" placeholder="https://example.com/data.csv">
+                                <div class="form-text">Provide a URL to a CSV or Excel file containing wafer sensor data.</div>
                             </div>
                             <button type="submit" class="btn btn-primary">Train Model</button>
                         </form>
