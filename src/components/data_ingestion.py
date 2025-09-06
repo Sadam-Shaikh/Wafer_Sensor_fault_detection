@@ -4,9 +4,19 @@ import pandas as pd
 import numpy as np
 import requests
 from sklearn.model_selection import train_test_split
-from utils.logger import get_logger
-from utils.exception import CustomException
-import config.config as config
+
+# Use relative imports when deployed
+try:
+    from src.utils.logger import get_logger
+    from src.utils.exception import CustomException
+    from src.utils.mongodb_utils import MongoDBClient
+    import src.config.config as config
+except ImportError:
+    # Fallback to direct imports if src module is not found
+    from utils.logger import get_logger
+    from utils.exception import CustomException
+    from utils.mongodb_utils import MongoDBClient
+    import config.config as config
 
 logger = get_logger(__name__)
 
@@ -16,6 +26,13 @@ class DataIngestion:
         Initialize data ingestion with configuration
         """
         self.ingestion_config = config.DATA_INGESTION_CONFIG
+        # Initialize MongoDB client
+        try:
+            self.mongodb_client = MongoDBClient()
+            logger.info("MongoDB client initialized successfully")
+        except Exception as e:
+            logger.warning(f"MongoDB client initialization failed: {e}. Data will not be stored in MongoDB.")
+            self.mongodb_client = None
         
     def initiate_data_ingestion(self, file_path=None):
         """
@@ -95,7 +112,7 @@ class DataIngestion:
             # Split data into train and test sets
             train_set, test_set = train_test_split(df, test_size=0.2, random_state=42)
             
-            # Save train and test data
+            # Save train and test data to local files
             train_file_path = os.path.join(self.ingestion_config["ingested_train_dir"], "train.csv")
             test_file_path = os.path.join(self.ingestion_config["ingested_test_dir"], "test.csv")
             
@@ -104,6 +121,46 @@ class DataIngestion:
             
             logger.info(f"Train data saved at: {train_file_path}")
             logger.info(f"Test data saved at: {test_file_path}")
+            
+            # Save data to MongoDB if client is available
+            if self.mongodb_client and self.mongodb_client.test_connection():
+                try:
+                    # Create metadata about the dataset
+                    metadata = {
+                        "source_file": os.path.basename(file_path),
+                        "total_records": len(df),
+                        "train_records": len(train_set),
+                        "test_records": len(test_set),
+                        "features": list(df.columns),
+                        "timestamp": pd.Timestamp.now().isoformat()
+                    }
+                    
+                    # Save original dataset
+                    _, _ = self.mongodb_client.save_dataframe(
+                        df, 
+                        "raw_data", 
+                        metadata=metadata
+                    )
+                    
+                    # Save train and test datasets
+                    _, _ = self.mongodb_client.save_dataframe(
+                        train_set, 
+                        "train_data", 
+                        metadata={"source_file": os.path.basename(file_path), "timestamp": pd.Timestamp.now().isoformat()}
+                    )
+                    
+                    _, _ = self.mongodb_client.save_dataframe(
+                        test_set, 
+                        "test_data", 
+                        metadata={"source_file": os.path.basename(file_path), "timestamp": pd.Timestamp.now().isoformat()}
+                    )
+                    
+                    logger.info("Data successfully saved to MongoDB")
+                except Exception as e:
+                    logger.error(f"Error saving data to MongoDB: {e}")
+                    logger.info("Continuing with local file storage only")
+            else:
+                logger.info("MongoDB client not available or connection failed. Data saved to local files only.")
             
             return train_file_path, test_file_path
             

@@ -1,22 +1,19 @@
 import sys
-from src.utils.logger import get_logger
+
+# Try to import from src or directly
+try:
+    from src.utils.logger import get_logger
+except ImportError:
+    from utils.logger import get_logger
 
 logger = get_logger(__name__)
 
-def error_message_detail(error, error_detail):
-    """
-    Generate detailed error message with file name and line number
-    """
-    _, _, exc_tb = error_detail.exc_info()
-    file_name = exc_tb.tb_frame.f_code.co_filename
-    error_message = f"Error occurred in python script name [{file_name}] line number [{exc_tb.tb_lineno}] error message [{str(error)}]"
-    
-    return error_message
-
 class CustomException(Exception):
-    def __init__(self, error_message, error_detail=sys):
+    def __init__(self, error_message, error_detail=None):
         super().__init__(error_message)
-        self.error_message = error_message_detail(error_message, error_detail)
-    
+        self.error_message = error_message
+        self.error_detail = error_detail or sys.exc_info()
+        logger.error(f"Exception occurred: {error_message}")
+        
     def __str__(self):
         return self.error_message

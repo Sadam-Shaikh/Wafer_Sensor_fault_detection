@@ -4,10 +4,19 @@ import pandas as pd
 from sklearn.preprocessing import StandardScaler
 from sklearn.impute import SimpleImputer
 from sklearn.pipeline import Pipeline
-from src.utils.logger import get_logger
-from src.utils.exception import CustomException
-from src.utils.utils import save_object
-from config.config import DATA_TRANSFORMATION_CONFIG
+
+# Use relative imports when deployed
+try:
+    from src.utils.logger import get_logger
+    from src.utils.exception import CustomException
+    from src.utils.utils import save_object
+    from src.config.config import DATA_TRANSFORMATION_CONFIG
+except ImportError:
+    # Fallback to direct imports if src module is not found
+    from utils.logger import get_logger
+    from utils.exception import CustomException
+    from utils.utils import save_object
+    from config.config import DATA_TRANSFORMATION_CONFIG
 
 logger = get_logger(__name__)
 

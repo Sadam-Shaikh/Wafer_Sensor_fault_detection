@@ -3,9 +3,39 @@ import pandas as pd
 from flask import Flask, render_template, request, jsonify, redirect, url_for
 from werkzeug.utils import secure_filename
 
+# Import MongoDB client
+try:
+    from utils.mongodb import MongoDBConnection
+    from utils.logger import get_logger
+except ImportError:
+    try:
+        from src.utils.mongodb import MongoDBConnection
+        from src.utils.logger import get_logger
+    except ImportError:
+        print("Could not import MongoDB client or logger")
+        MongoDBConnection = None
+        get_logger = None
+
+# Initialize logger
+logger = get_logger(__name__) if get_logger else None
+
 app = Flask(__name__)
 app.config['UPLOAD_FOLDER'] = os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', 'data', 'raw')
 app.config['ALLOWED_EXTENSIONS'] = {'csv', 'xlsx', 'xls'}
+
+# Initialize MongoDB client
+try:
+    mongodb_client = MongoDBConnection()
+    if mongodb_client.test_connection():
+        mongodb_client.connect()  # Connect to the database
+        logger.info("MongoDB connection established successfully") if logger else print("MongoDB connection established successfully")
+    else:
+        logger.warning("MongoDB connection test failed") if logger else print("MongoDB connection test failed")
+        mongodb_client = None
+except Exception as e:
+    error_msg = f"Error initializing MongoDB client: {e}"
+    logger.error(error_msg) if logger else print(error_msg)
+    mongodb_client = None
 
 def allowed_file(filename):
     return '.' in filename and filename.rsplit('.', 1)[1].lower() in app.config['ALLOWED_EXTENSIONS']
@@ -38,6 +68,31 @@ def predict():
                     df = pd.read_csv(filepath)
                 else:
                     df = pd.read_excel(filepath)
+                
+                # Save data to MongoDB if client is available
+                if mongodb_client:
+                    try:
+                        # Create metadata
+                        metadata = {
+                            "source_file": filename,
+                            "upload_time": pd.Timestamp.now().isoformat(),
+                            "record_count": len(df)
+                        }
+                        
+                        # Save to MongoDB
+                        record_ids = mongodb_client.save_dataframe("uploaded_data", df, metadata=metadata)
+                        
+                        if logger:
+                            logger.info(f"Data from {filename} saved to MongoDB successfully")
+                        
+                        # Add MongoDB success message
+                        mongodb_success = f"Data saved to MongoDB successfully with {len(record_ids)} records"
+                    except Exception as e:
+                        if logger:
+                            logger.error(f"Error saving data to MongoDB: {e}")
+                        mongodb_success = None
+                else:
+                    mongodb_success = None
                 
                 # Try to use the actual prediction pipeline if possible
                 try:
@@ -72,6 +127,7 @@ def predict():
                 
                 return render_template('predict.html', 
                                       success=f"File {filename} processed successfully",
+                                      mongodb_success=mongodb_success,
                                       result_table=df.head(10).to_html(classes='table table-striped'),
                                       predictions=predictions[:10],
                                       good_count=good_count,

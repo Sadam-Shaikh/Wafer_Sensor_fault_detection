@@ -2,10 +2,19 @@ import os
 import numpy as np
 from sklearn.ensemble import RandomForestClassifier, GradientBoostingClassifier
 from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_score
-from src.utils.logger import get_logger
-from src.utils.exception import CustomException
-from src.utils.utils import save_object
-from config.config import MODEL_TRAINER_CONFIG
+
+# Use relative imports when deployed
+try:
+    from src.utils.logger import get_logger
+    from src.utils.exception import CustomException
+    from src.utils.utils import save_object
+    from src.config.config import MODEL_TRAINER_CONFIG
+except ImportError:
+    # Fallback to direct imports if src module is not found
+    from utils.logger import get_logger
+    from utils.exception import CustomException
+    from utils.utils import save_object
+    from config.config import MODEL_TRAINER_CONFIG
 
 logger = get_logger(__name__)
 

@@ -1,11 +1,25 @@
 import os
 import sys
-from src.components.data_ingestion import DataIngestion
-from src.components.data_validation import DataValidation
-from src.components.data_transformation import DataTransformation
-from src.components.model_trainer import ModelTrainer
-from src.utils.logger import get_logger
-from src.utils.exception import CustomException
+import pandas as pd
+
+# Use relative imports when deployed
+try:
+    from src.components.data_ingestion import DataIngestion
+    from src.components.data_validation import DataValidation
+    from src.components.data_transformation import DataTransformation
+    from src.components.model_trainer import ModelTrainer
+    from src.utils.logger import get_logger
+    from src.utils.exception import CustomException
+    from src.utils.mongodb_utils import MongoDBClient
+except ImportError:
+    # Fallback to direct imports if src module is not found
+    from components.data_ingestion import DataIngestion
+    from components.data_validation import DataValidation
+    from components.data_transformation import DataTransformation
+    from components.model_trainer import ModelTrainer
+    from utils.logger import get_logger
+    from utils.exception import CustomException
+    from utils.mongodb_utils import MongoDBClient
 
 logger = get_logger(__name__)
 
@@ -56,6 +70,32 @@ class TrainPipeline:
             logger.info("Model Training started")
             model_path = self.model_trainer.initiate_model_training(train_arr, test_arr)
             logger.info("Model Training completed")
+            
+            # Save model metadata to MongoDB
+            try:
+                # Connect to MongoDB
+                mongo_client = MongoDBClient()
+                
+                # Create model metadata
+                model_metadata = {
+                    "model_path": model_path,
+                    "timestamp": pd.Timestamp.now().isoformat(),
+                    "preprocessor_path": preprocessor_path,
+                    "status": "trained"
+                }
+                
+                # Save model metadata
+                if mongo_client.test_connection():
+                    mongo_client.save_dataframe(
+                        pd.DataFrame([model_metadata]), 
+                        "models", 
+                        metadata={"type": "model_metadata"}
+                    )
+                
+                logger.info("Model metadata saved to MongoDB")
+            except Exception as e:
+                logger.warning(f"Failed to save model metadata to MongoDB: {e}")
+                logger.info("Continuing with local model storage only")
             
             logger.info(f"Training pipeline completed successfully. Model saved at: {model_path}")
             

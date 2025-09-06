@@ -2,9 +2,20 @@ import os
 import sys
 import pandas as pd
 import numpy as np
-from src.utils.logger import get_logger
-from src.utils.exception import CustomException
-from src.utils.utils import load_object
+import datetime
+
+# Use relative imports when deployed
+try:
+    from src.utils.logger import get_logger
+    from src.utils.exception import CustomException
+    from src.utils.utils import load_object
+    from src.utils.mongodb_utils import MongoDBClient
+except ImportError:
+    # Fallback to direct imports if src module is not found
+    from utils.logger import get_logger
+    from utils.exception import CustomException
+    from utils.utils import load_object
+    from utils.mongodb_utils import MongoDBClient
 
 logger = get_logger(__name__)
 
@@ -41,6 +52,14 @@ class PredictionPipeline:
             
             self.model = load_object(model_path)
             self.preprocessor = load_object(preprocessor_path)
+            
+            # Initialize MongoDB client
+            try:
+                self.mongodb_client = MongoDBClient()
+                logger.info("MongoDB client initialized successfully")
+            except Exception as e:
+                logger.warning(f"MongoDB client initialization failed: {e}. Predictions will not be stored in MongoDB.")
+                self.mongodb_client = None
             
         except Exception as e:
             logger.error(f"Error initializing prediction pipeline: {e}")
@@ -85,6 +104,34 @@ class PredictionPipeline:
             
             # Make predictions
             predictions = self.model.predict(transformed_features)
+            
+            # Store predictions in MongoDB
+            if hasattr(self, 'mongodb_client') and self.mongodb_client and self.mongodb_client.test_connection():
+                try:
+                    # Create a DataFrame with input features and predictions
+                    if isinstance(features, pd.DataFrame):
+                        result_df = features.copy()
+                    else:
+                        result_df = pd.DataFrame(features)
+                    
+                    # Add predictions column
+                    result_df['prediction'] = predictions
+                    result_df['timestamp'] = pd.Timestamp.now()
+                    
+                    # Create metadata
+                    metadata = {
+                        "prediction_time": pd.Timestamp.now().isoformat(),
+                        "record_count": len(result_df),
+                        "model_used": str(self.model.__class__.__name__)
+                    }
+                    
+                    # Save to MongoDB
+                    self.mongodb_client.save_predictions(result_df, predictions.tolist(), "predictions")
+                    
+                    logger.info("Predictions saved to MongoDB")
+                except Exception as e:
+                    logger.error(f"Error saving predictions to MongoDB: {e}")
+                    logger.info("Continuing without storing predictions")
             
             logger.info("Prediction completed successfully")
             

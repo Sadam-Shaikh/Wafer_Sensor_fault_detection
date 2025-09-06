@@ -78,7 +78,11 @@ def train():
     else:
         try:
             # Import here to avoid circular import
-            from src.pipeline.train_pipeline import TrainPipeline
+            try:
+                from src.pipeline.train_pipeline import TrainPipeline
+            except ImportError:
+                # Fallback to direct import if src module is not found
+                from pipeline.train_pipeline import TrainPipeline
             
             # Handle file upload
             if 'file' not in request.files:
