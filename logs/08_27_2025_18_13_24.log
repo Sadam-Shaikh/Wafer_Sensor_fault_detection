@@ -1,0 +1,27 @@
+[ 2025-08-27 18:13:24,364 ] 97 werkzeug - WARNING -  * Debugger is active!
+[ 2025-08-27 18:13:24,368 ] 97 werkzeug - INFO -  * Debugger PIN: 683-136-572
+[ 2025-08-27 18:13:28,832 ] 97 werkzeug - INFO - 127.0.0.1 - - [27/Aug/2025 18:13:28] "GET / HTTP/1.1" 200 -
+[ 2025-08-27 18:13:29,038 ] 97 werkzeug - INFO - 127.0.0.1 - - [27/Aug/2025 18:13:29] "[33mGET /favicon.ico HTTP/1.1[0m" 404 -
+[ 2025-08-27 18:13:31,939 ] 97 werkzeug - INFO - 127.0.0.1 - - [27/Aug/2025 18:13:31] "GET /train HTTP/1.1" 200 -
+[ 2025-08-27 18:13:57,207 ] 95 __main__ - INFO - File uploaded for training: wafer_23012020_041211 (1).csv
+[ 2025-08-27 18:13:57,207 ] 104 __main__ - ERROR - Error in training: name 'DATA_INGESTION_CONFIG' is not defined
+[ 2025-08-27 18:13:57,209 ] 97 werkzeug - INFO - 127.0.0.1 - - [27/Aug/2025 18:13:57] "POST /train HTTP/1.1" 200 -
+[ 2025-08-27 18:14:09,186 ] 97 werkzeug - INFO - 127.0.0.1 - - [27/Aug/2025 18:14:09] "GET /predict HTTP/1.1" 200 -
+[ 2025-08-27 18:14:23,180 ] 35 __main__ - INFO - File uploaded: test_wafer1 (1).csv, Shape: (101, 592)
+[ 2025-08-27 18:14:23,181 ] 45 pipeline.predict_pipeline - ERROR - Error initializing prediction pipeline: [WinError 3] The system cannot find the path specified: 'D:\\ML-project-main\\ML-project-main\\artifacts'
+[ 2025-08-27 18:14:23,181 ] 71 __main__ - ERROR - Error in prediction: Error occurred in python script name [D:\ML-project-main\ML-project-main\src\pipeline\predict_pipeline.py] line number [26] error message [[WinError 3] The system cannot find the path specified: 'D:\\ML-project-main\\ML-project-main\\artifacts']
+[ 2025-08-27 18:14:23,182 ] 97 werkzeug - INFO - 127.0.0.1 - - [27/Aug/2025 18:14:23] "POST /predict HTTP/1.1" 200 -
+[ 2025-08-27 18:14:37,049 ] 45 pipeline.predict_pipeline - ERROR - Error initializing prediction pipeline: [WinError 3] The system cannot find the path specified: 'D:\\ML-project-main\\ML-project-main\\artifacts'
+[ 2025-08-27 18:14:37,049 ] 71 __main__ - ERROR - Error in prediction: Error occurred in python script name [D:\ML-project-main\ML-project-main\src\pipeline\predict_pipeline.py] line number [26] error message [[WinError 3] The system cannot find the path specified: 'D:\\ML-project-main\\ML-project-main\\artifacts']
+[ 2025-08-27 18:14:37,050 ] 97 werkzeug - INFO - 127.0.0.1 - - [27/Aug/2025 18:14:37] "POST /predict HTTP/1.1" 200 -
+[ 2025-08-27 18:14:58,133 ] 97 werkzeug - INFO - 127.0.0.1 - - [27/Aug/2025 18:14:58] "GET /train HTTP/1.1" 200 -
+[ 2025-08-27 18:15:22,514 ] 97 werkzeug - INFO - 127.0.0.1 - - [27/Aug/2025 18:15:22] "GET /train HTTP/1.1" 200 -
+[ 2025-08-27 18:15:43,461 ] 95 __main__ - INFO - File uploaded for training: wafer_23012020_041211.csv
+[ 2025-08-27 18:15:43,461 ] 104 __main__ - ERROR - Error in training: name 'DATA_INGESTION_CONFIG' is not defined
+[ 2025-08-27 18:15:43,462 ] 97 werkzeug - INFO - 127.0.0.1 - - [27/Aug/2025 18:15:43] "POST /train HTTP/1.1" 200 -
+[ 2025-08-27 18:16:17,092 ] 97 werkzeug - INFO - 127.0.0.1 - - [27/Aug/2025 18:16:17] "GET /predict HTTP/1.1" 200 -
+[ 2025-08-27 18:16:38,309 ] 35 __main__ - INFO - File uploaded: test_wafer1 (1).csv, Shape: (101, 592)
+[ 2025-08-27 18:16:38,310 ] 45 pipeline.predict_pipeline - ERROR - Error initializing prediction pipeline: [WinError 3] The system cannot find the path specified: 'D:\\ML-project-main\\ML-project-main\\artifacts'
+[ 2025-08-27 18:16:38,310 ] 71 __main__ - ERROR - Error in prediction: Error occurred in python script name [D:\ML-project-main\ML-project-main\src\pipeline\predict_pipeline.py] line number [26] error message [[WinError 3] The system cannot find the path specified: 'D:\\ML-project-main\\ML-project-main\\artifacts']
+[ 2025-08-27 18:16:38,311 ] 97 werkzeug - INFO - 127.0.0.1 - - [27/Aug/2025 18:16:38] "POST /predict HTTP/1.1" 200 -
+[ 2025-08-27 18:18:30,701 ] 97 werkzeug - INFO -  * Detected change in 'D:\\ML-project-main\\ML-project-main\\src\\components\\data_ingestion.py', reloading

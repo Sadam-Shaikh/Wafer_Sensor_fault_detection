@@ -1,0 +1,55 @@
+[ 2025-08-27 18:45:33,428 ] 97 werkzeug - WARNING -  * Debugger is active!
+[ 2025-08-27 18:45:33,432 ] 97 werkzeug - INFO -  * Debugger PIN: 683-136-572
+[ 2025-08-27 18:45:47,992 ] 97 werkzeug - INFO - 127.0.0.1 - - [27/Aug/2025 18:45:47] "GET / HTTP/1.1" 200 -
+[ 2025-08-27 18:45:51,897 ] 97 werkzeug - INFO - 127.0.0.1 - - [27/Aug/2025 18:45:51] "GET /train HTTP/1.1" 200 -
+[ 2025-08-27 18:46:00,234 ] 95 __main__ - INFO - File uploaded for training: wafer_23012020_041211 (1).csv
+[ 2025-08-27 18:46:00,234 ] 33 src.pipeline.train_pipeline - INFO - Starting training pipeline
+[ 2025-08-27 18:46:00,234 ] 36 src.pipeline.train_pipeline - INFO - Data Ingestion started
+[ 2025-08-27 18:46:00,235 ] 34 components.data_ingestion - INFO - Data ingestion initiated
+[ 2025-08-27 18:46:00,236 ] 47 components.data_ingestion - INFO - Reading data from D:\ML-project-main\ML-project-main\data\raw\wafer_23012020_041211 (1).csv
+[ 2025-08-27 18:46:00,260 ] 61 components.data_ingestion - INFO - Dataset shape: (100, 592)
+[ 2025-08-27 18:46:00,295 ] 78 components.data_ingestion - INFO - Train data saved at: D:\ML-project-main\ML-project-main\artifacts\2025-08-27-18-46-00\data_ingestion\train\train.csv
+[ 2025-08-27 18:46:00,295 ] 79 components.data_ingestion - INFO - Test data saved at: D:\ML-project-main\ML-project-main\artifacts\2025-08-27-18-46-00\data_ingestion\test\test.csv
+[ 2025-08-27 18:46:00,295 ] 38 src.pipeline.train_pipeline - INFO - Data Ingestion completed
+[ 2025-08-27 18:46:00,295 ] 41 src.pipeline.train_pipeline - INFO - Data Validation started
+[ 2025-08-27 18:46:00,295 ] 95 components.data_validation - INFO - Starting data validation
+[ 2025-08-27 18:46:00,332 ] 104 components.data_validation - INFO - Train dataset shape: (80, 592)
+[ 2025-08-27 18:46:00,332 ] 105 components.data_validation - INFO - Test dataset shape: (20, 592)
+[ 2025-08-27 18:46:00,332 ] 28 components.data_validation - INFO - Schema loaded successfully from D:\ML-project-main\ML-project-main\config\schema.json
+[ 2025-08-27 18:46:00,333 ] 28 components.data_validation - INFO - Schema loaded successfully from D:\ML-project-main\ML-project-main\config\schema.json
+[ 2025-08-27 18:46:00,333 ] 126 components.data_validation - INFO - Data validation completed with status: True
+[ 2025-08-27 18:46:00,334 ] 127 components.data_validation - INFO - Validation report saved at: D:\ML-project-main\ML-project-main\artifacts\2025-08-27-18-46-00\data_validation\report.json
+[ 2025-08-27 18:46:00,334 ] 43 src.pipeline.train_pipeline - INFO - Data Validation completed
+[ 2025-08-27 18:46:00,334 ] 49 src.pipeline.train_pipeline - INFO - Data Transformation started
+[ 2025-08-27 18:46:00,368 ] 64 components.data_transformation - INFO - Train dataset shape: (80, 592)
+[ 2025-08-27 18:46:00,368 ] 65 components.data_transformation - INFO - Test dataset shape: (20, 592)
+[ 2025-08-27 18:46:00,369 ] 37 components.data_transformation - INFO - Numerical preprocessing pipeline created
+[ 2025-08-27 18:46:00,395 ] 94 components.data_transformation - INFO - Transformed train data saved at: D:\ML-project-main\ML-project-main\artifacts\2025-08-27-18-46-00\data_transformation\train\transformed_train.npz
+[ 2025-08-27 18:46:00,395 ] 95 components.data_transformation - INFO - Transformed test data saved at: D:\ML-project-main\ML-project-main\artifacts\2025-08-27-18-46-00\data_transformation\test\transformed_test.npz
+[ 2025-08-27 18:46:00,396 ] 21 utils.utils - INFO - Object saved successfully at: D:\ML-project-main\ML-project-main\artifacts\2025-08-27-18-46-00\data_transformation\preprocessed.pkl
+[ 2025-08-27 18:46:00,396 ] 101 components.data_transformation - INFO - Preprocessor object saved at: D:\ML-project-main\ML-project-main\artifacts\2025-08-27-18-46-00\data_transformation\preprocessed.pkl
+[ 2025-08-27 18:46:00,396 ] 53 src.pipeline.train_pipeline - INFO - Data Transformation completed
+[ 2025-08-27 18:46:00,397 ] 56 src.pipeline.train_pipeline - INFO - Model Training started
+[ 2025-08-27 18:46:00,397 ] 95 components.model_trainer - INFO - Splitting training and test data into features and target
+[ 2025-08-27 18:46:00,397 ] 40 components.model_trainer - INFO - Training Random Forest model
+[ 2025-08-27 18:46:00,528 ] 60 components.model_trainer - INFO - Random Forest - Accuracy: 1.0, Precision: 1.0, Recall: 1.0, F1: 1.0
+[ 2025-08-27 18:46:00,528 ] 40 components.model_trainer - INFO - Training Gradient Boosting model
+[ 2025-08-27 18:46:02,245 ] 60 components.model_trainer - INFO - Gradient Boosting - Accuracy: 1.0, Precision: 1.0, Recall: 1.0, F1: 1.0
+[ 2025-08-27 18:46:02,245 ] 67 components.model_trainer - INFO - Best model: Random Forest with accuracy: 1.0
+[ 2025-08-27 18:46:02,255 ] 113 components.model_trainer - INFO - Test metrics - Accuracy: 1.0, Precision: 0.0, Recall: 0.0, F1: 0.0
+[ 2025-08-27 18:46:02,260 ] 21 utils.utils - INFO - Object saved successfully at: D:\ML-project-main\ML-project-main\artifacts\2025-08-27-18-46-00\model_trainer\model.pkl
+[ 2025-08-27 18:46:02,260 ] 119 components.model_trainer - INFO - Model saved at: D:\ML-project-main\ML-project-main\artifacts\2025-08-27-18-46-00\model_trainer\model.pkl
+[ 2025-08-27 18:46:02,260 ] 58 src.pipeline.train_pipeline - INFO - Model Training completed
+[ 2025-08-27 18:46:02,260 ] 60 src.pipeline.train_pipeline - INFO - Training pipeline completed successfully. Model saved at: D:\ML-project-main\ML-project-main\artifacts\2025-08-27-18-46-00\model_trainer\model.pkl
+[ 2025-08-27 18:46:02,261 ] 97 werkzeug - INFO - 127.0.0.1 - - [27/Aug/2025 18:46:02] "POST /train HTTP/1.1" 200 -
+[ 2025-08-27 18:46:03,829 ] 97 werkzeug - INFO - 127.0.0.1 - - [27/Aug/2025 18:46:03] "GET /predict HTTP/1.1" 200 -
+[ 2025-08-27 18:46:12,392 ] 35 __main__ - INFO - File uploaded: test_wafer1 (1).csv, Shape: (101, 592)
+[ 2025-08-27 18:46:12,393 ] 39 pipeline.predict_pipeline - INFO - Loading model from: D:\ML-project-main\ML-project-main\artifacts\2025-08-27-18-46-00\model_trainer\model.pkl
+[ 2025-08-27 18:46:12,393 ] 40 pipeline.predict_pipeline - INFO - Loading preprocessor from: D:\ML-project-main\ML-project-main\artifacts\2025-08-27-18-46-00\data_transformation\preprocessed.pkl
+[ 2025-08-27 18:46:12,398 ] 33 utils.utils - INFO - Object loaded successfully from: D:\ML-project-main\ML-project-main\artifacts\2025-08-27-18-46-00\model_trainer\model.pkl
+[ 2025-08-27 18:46:12,398 ] 33 utils.utils - INFO - Object loaded successfully from: D:\ML-project-main\ML-project-main\artifacts\2025-08-27-18-46-00\data_transformation\preprocessed.pkl
+[ 2025-08-27 18:46:12,398 ] 60 pipeline.predict_pipeline - INFO - Starting prediction
+[ 2025-08-27 18:46:12,400 ] 73 pipeline.predict_pipeline - INFO - Dropped unnamed/index columns before transform
+[ 2025-08-27 18:46:12,414 ] 89 pipeline.predict_pipeline - INFO - Prediction completed successfully
+[ 2025-08-27 18:46:13,270 ] 97 werkzeug - INFO - 127.0.0.1 - - [27/Aug/2025 18:46:13] "POST /predict HTTP/1.1" 200 -
+[ 2025-08-27 19:06:48,440 ] 97 werkzeug - INFO -  * Detected change in 'D:\\ML-project-main\\ML-project-main\\src\\components\\data_ingestion.py', reloading

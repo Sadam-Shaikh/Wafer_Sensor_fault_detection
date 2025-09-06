@@ -1,0 +1,12 @@
+{
+    "columns": {
+        "Wafer": "object",
+        "Good/Bad": "int"
+    },
+    "target_column": "Good/Bad",
+    "domain_value": {
+        "Good/Bad": [0, 1]
+    },
+    "numerical_columns": [],
+    "categorical_columns": ["Wafer"]
+}
