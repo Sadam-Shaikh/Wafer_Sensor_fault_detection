@@ -1,5 +1,9 @@
 import os
 from datetime import datetime
+from dotenv import load_dotenv
+
+# Load environment variables from .env file
+load_dotenv()
 
 # Define paths
 ROOT_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -20,7 +24,7 @@ TRAINING_PIPELINE_CONFIG = {
 
 # Data ingestion config
 DATA_INGESTION_CONFIG = {
-    "dataset_download_url": None,  # Add URL if data needs to be downloaded
+    "dataset_download_url": os.getenv("DATA_FILE_URL"),  # Get URL from environment variable
     "raw_data_dir": RAW_DATA_DIR,
     "ingested_dir": os.path.join(ARTIFACTS_DIR, CURRENT_TIME_STAMP, "data_ingestion"),
     "ingested_train_dir": os.path.join(ARTIFACTS_DIR, CURRENT_TIME_STAMP, "data_ingestion", "train"),

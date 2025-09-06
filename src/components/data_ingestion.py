@@ -2,6 +2,7 @@ import os
 import sys
 import pandas as pd
 import numpy as np
+import requests
 from sklearn.model_selection import train_test_split
 from utils.logger import get_logger
 from utils.exception import CustomException
@@ -33,16 +34,42 @@ class DataIngestion:
             
             logger.info("Data ingestion initiated")
             
-            # If file path is not provided, pick a valid wafer csv from raw data directory
+            # If file path is not provided, check for dataset URL or use existing files
             if file_path is None:
-                raw_dir = self.ingestion_config["raw_data_dir"]
-                raw_files = [f for f in os.listdir(raw_dir) if f.lower().endswith('.csv')]
-                if len(raw_files) == 0:
-                    raise Exception("No CSV files found in raw data directory")
-                # Prefer files that look like wafer datasets
-                wafer_like = [f for f in raw_files if 'wafer' in f.lower()]
-                chosen = wafer_like[0] if wafer_like else raw_files[0]
-                file_path = os.path.join(raw_dir, chosen)
+                # Check if dataset URL is provided in config (from environment variable)
+                dataset_url = self.ingestion_config["dataset_download_url"]
+                if dataset_url:
+                    logger.info(f"Downloading dataset from URL: {dataset_url}")
+                    try:
+                        # Download the file
+                        response = requests.get(dataset_url)
+                        response.raise_for_status()  # Raise exception for HTTP errors
+                        
+                        # Save to raw data directory
+                        raw_dir = self.ingestion_config["raw_data_dir"]
+                        os.makedirs(raw_dir, exist_ok=True)
+                        downloaded_file_path = os.path.join(raw_dir, "downloaded_dataset.csv")
+                        
+                        with open(downloaded_file_path, 'wb') as f:
+                            f.write(response.content)
+                        
+                        logger.info(f"Dataset downloaded and saved to {downloaded_file_path}")
+                        file_path = downloaded_file_path
+                    except Exception as e:
+                        logger.error(f"Error downloading dataset: {e}")
+                        logger.info("Falling back to local files")
+                        # Continue with local file selection
+                
+                # If URL download failed or wasn't provided, use local files
+                if file_path is None:
+                    raw_dir = self.ingestion_config["raw_data_dir"]
+                    raw_files = [f for f in os.listdir(raw_dir) if f.lower().endswith('.csv')]
+                    if len(raw_files) == 0:
+                        raise Exception("No CSV files found in raw data directory")
+                    # Prefer files that look like wafer datasets
+                    wafer_like = [f for f in raw_files if 'wafer' in f.lower()]
+                    chosen = wafer_like[0] if wafer_like else raw_files[0]
+                    file_path = os.path.join(raw_dir, chosen)
             
             logger.info(f"Reading data from {file_path}")
             

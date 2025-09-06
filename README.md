@@ -46,8 +46,22 @@ pip install -r requirements.txt
 python src/app.py
 ```
 
+## Environment Variables
+
+This project uses environment variables for configuration. Create a `.env` file in the root directory with the following variables:
+
+```
+PYTHON_VERSION=3.11.9
+PYTHONUNBUFFERED=1
+PIP_ONLY_BINARY=:all:
+DATA_FILE_URL=https://your-public-bucket/path/to/your_labeled_dataset.csv
+PYTHONPATH=.
+```
+
+These variables will be automatically loaded when the application starts.
+
 ## Usage
 
-1. Place your wafer sensor data in the `data/raw` directory
+1. Place your wafer sensor data in the `data/raw` directory or specify a URL in the `.env` file
 2. Run the training pipeline to train the model
 3. Use the web interface to make predictions on new data
